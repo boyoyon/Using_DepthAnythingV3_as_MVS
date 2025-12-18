@@ -21,7 +21,11 @@ Depth Anything V3を使って多視点ステレオを行うプログラムです
 <img src="images/Rgbd2Pcd.gif"><br>
 <br>
 カラーキーでPLYをフィルター<br>
-<img src="images/filteredPLY.gif">
+<img src="images/filteredPLY.gif"><br>
+<br>
+1枚1枚の点群はどれほど悪くない。合成前に点群の縁(へり)のゴミを削ればよさそう。<br>
+点群の縁(へり)はどうやって抽出するんだろう･･･<br>
+<img src="images/Rgbd2Pcd_0001.gif"><br>
 </p>
 
 <h2>環境構築方法</h2>
@@ -67,5 +71,6 @@ Depth Anything V3を使って多視点ステレオを行うプログラムです
 [3] 点群を表示する<br>
 　　python o3d_display_ply.py (点群ファイル)<br>
 </p>
-</body>
+
+    </body>
 </html>
