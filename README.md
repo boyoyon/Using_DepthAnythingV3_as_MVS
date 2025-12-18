@@ -67,6 +67,5 @@ Depth Anything V3を使って多視点ステレオを行うプログラムです
 [3] 点群を表示する<br>
 　　python o3d_display_ply.py (点群ファイル)<br>
 </p>
-
-    </body>
+</body>
 </html>
