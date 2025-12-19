@@ -8,24 +8,47 @@
 <p>
 Depth Anything V3を使って多視点ステレオを行うプログラムです。<br>
 <br>
-多視点画像の深度画像を点群にしてまとめてみたが･･･(VGGTの時よりひどい結果に)<br>
-(いつか改善するかも知れないので)備忘録として･･･<br>
-・背景との境界が汚くなるので, 点群に透明度を持たせるか?<br>
-・ICPか何かで位置合わせをしないと･･･<br>
-　　：<br>
-<br>
-入力画像<br>
+<img src="images/workflow0.svg"><br>
+入力するRGB画像群の例<br>
 <img src="images/InputImages.png"><br>
 <br>
-点群の貼り合わせ結果<br>
+Depth Anything V3を実行すると以下が得られる。<br>
+・Processed RGB画像群 ･･･ AIモデルの解像度にリサイズされたRGB画像群<br>
+・Depth画像群　　　　 ･･･ 各ピクセルの深度を推定したもの<br>
+・Conf画像群　　　　　･･･ 各ピクセルの推定確度(今のところ使用せず)<br>
+・内部パラメータ群　　･･･ ピクセル座標→カメラ座標の変換パラメータ群<br>
+・外部パラメータ群　　･･･ カメラ座標→ワールド座標の変換パラメータ群<br>
+<br>
+Depth画像 / 内部パラメータ / 外部パラメータを使うとワールド座標に変換された点群が得られるが,<br>
+各RGB画像には背景が写っており, <br>
+<br>
+
+<img src="images/Rgbd2Pcd.png"><br>
+<br>
+そのまま合成すると, こうなってしまう。<br>
+
 <img src="images/Rgbd2Pcd.gif"><br>
 <br>
-カラーキーでPLYをフィルター<br>
+後処理で背景色の点群を削除しても以下のようになる。<br>
+
 <img src="images/filteredPLY.gif"><br>
 <br>
-1枚1枚の点群はどれほど悪くない。合成前に点群の縁(へり)のゴミを削ればよさそう。<br>
-点群の縁(へり)はどうやって抽出するんだろう･･･<br>
-<img src="images/Rgbd2Pcd_0001.gif"><br>
+
+課題1) 境界付近の点群が背景色に汚染されている。<br>
+課題2) 位置合わせが不完全<br>
+<br>
+合成前でもこんな感じ<br>
+<img src="images/Rgbd2Pcd_0001.gif">
+
+<br>
+
+対策1) ピクセル座標の段階で境界付近の点を削る。<br>
+<img src="images/workaround1.svg">
+<br>
+つづく･･･<br>
+<br>
+対策2) レジストレーション：未着手<br>
+
 </p>
 
 <h2>環境構築方法</h2>
@@ -44,17 +67,7 @@ Depth Anything V3を使って多視点ステレオを行うプログラムです
 　　pip install -r requrements.txt
 </p>
 <h2>使い方</h2>
-<p>
-●ワークフロー
-</p>
-<img src="images/workflow.svg">
-<p>
-　・Processed RGB画像群 ･･･ AIモデルの解像度にリサイズされたRGB画像群<br>
-　・Depth画像群　　　　 ･･･ 推定された奥行画像群<br>
-　・Conf画像群　　　　　･･･ ピクセル毎の推定確度(今のところ使用せず)<br>
-　・内部パラメータ群　　･･･ 推定されたカメラ内部パラメータ<br>
-　・外部パラメータ群　　･･･ 推定されたカメラ外部パラメータ<br>
-</p>
+
 <p>
 [0] 本github/src内のスクリプトを<br>
 　　Depth-Anything-3-main/src 配下にコピーする<br>
@@ -64,13 +77,22 @@ Depth Anything V3を使って多視点ステレオを行うプログラムです
 　　(例) python ExecDA3.py input/*.png<br>
 　　実行結果は result* フォルダに出力される。<br>
 <br>
-[2] Depth Anything V3の推論結果から点群を作成する<br>
+[2] 対策1)の侵食量を色々試して決める<br>
+　　python trying_erode_level.py (RGB画像)<br>
+　　※ (R,G,B)=(0,0,0)の領域をマスクと見なすので、そうなっていないRGB画像ではうまく動作しません。<br>
+<img src="images/trying_erode_level.png"><br>
+<br>
+
+[3] Depth Anything V3の推論結果から点群を作成する<br>
 　　python Rgbd2Pcd.py (推論結果を格納したフォルダ)<br>
 　　(例) python Rgbd2Pcd.py result<br>
+
 <br>
-[3] 点群を表示する<br>
+　　※ 対策1) はまだ適用されていません･･･<br>
+　　　 対策2) も･･･<br>
+<br>
+[4] 点群を表示する<br>
 　　python o3d_display_ply.py (点群ファイル)<br>
 </p>
-
-    </body>
+</body>
 </html>
