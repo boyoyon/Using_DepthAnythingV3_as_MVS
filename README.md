@@ -45,10 +45,12 @@ Depth画像 / 内部パラメータ / 外部パラメータを使うとワール
 対策1) ピクセル座標の段階で境界付近の点を削る。<br>
 <img src="images/workaround1.svg"><br>
 <br>
-erodeサイズ:5で境界付近の点群の汚れは取れた。<br>
+侵食サイズ:5 で境界付近の点群の汚れは取れた。<br>
 (テストソース)<br>
 ・single_step_erode_rgb_depth_to_pcd.py <br>
-・1枚分の RGB(png), Depth(,npy) Intrinsic(.npy), Extrinsic(.npy) を与えると ply を作成する。<br> 
+　座標変換のバグを修正。<br>
+　引数の指定も面倒だったので変更した。<br>
+　(DepthAnythingV3実行結果のフォルダ)　(フレーム番号) を指定する。<br> 
 <img src="images/erode_5.gif"><br>
 
 ただ複数の点群(.ply)を合成するとこんな感じ･･･<br>
@@ -57,10 +59,19 @@ erodeサイズ:5で境界付近の点群の汚れは取れた。<br>
 ・引数で PLYファイルへのワイルドカード(*.ply)を指定する<br>
 <img src="images/erode_and_composite.png"><br>
 <br>
-Open3Dにやってもらっていた座標変換を自前で実行したのでミスしているのか, 課題2のせいなのか？<br>
-つづく･･･<br>
+対策2) 位置合わせ：ICPを実施。<br>
+(テストソース)<br>
+・test_ICP.py<br>
+・引数 (PLYファイル1) (PLYファイル2)<br>
+　きれいにはつなぎ合わせられず･･･(手動でつなぎ合わせるか･･･)<br>
 <br>
-対策2) レジストレーション：未着手<br>
+　課題3) 位置合わせがうまくいった場合でも色合い、明るさの不連続が目立つ。<br>
+
+<img src="images/ICP.svg"><br>
+<br>
+さらなる改善を思いつくまで一旦終了･･･<br>
+<br>
+
 
 </p>
 
