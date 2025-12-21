@@ -69,6 +69,14 @@ Depth画像 / 内部パラメータ / 外部パラメータを使うとワール
 
 <img src="images/ICP.svg"><br>
 <br>
+対策2') 位置合わせ：手動で位置合わせ。<br>
+(テストソース)<br>
+・manually_register.py<br>
+・引数 (PLYファイル1) (PLYファイル2)<br>
+　キー 1/2/3 で回転,　キー 4/5/6 で平行移動,　Shiftキーで逆方向<br>
+　あっちを合わせれば、こっちがずれる･･･で気が変になりそうになる<br>
+<img src="images/manually_register.gif"><br>
+<br>
 さらなる改善を思いつくまで一旦終了･･･<br>
 <br>
 
